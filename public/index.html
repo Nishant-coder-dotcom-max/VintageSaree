@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintage Saree House</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDKs for Phone Auth -->
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <!-- Provide your Firebase project config here -->
+    <script defer src="firebase-config.js"></script>
+    <script defer src="config.js"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <!-- Language Chooser Modal -->
+    <div id="lang-modal" class="lang-modal">
+        <div class="lang-modal-content">
+            <h2 class="lang-modal-title">Choose Language / ভাষা নির্বাচন করুন</h2>
+            <div class="lang-modal-buttons">
+                <button id="modal-lang-en" class="lang-modal-btn">English</button>
+                <button id="modal-lang-bn" class="lang-modal-btn">বাংলা</button>
+            </div>
+        </div>
+    </div>
+    <!-- Logo Animation Overlay -->
+    <div id="logo-animation-overlay">
+        <svg id="vintage-logo" width="120" height="120" viewBox="0 0 120 120">
+            <!-- Placeholder for a vintage Bengali motif logo -->
+            <circle cx="60" cy="60" r="55" stroke="#7c3f00" stroke-width="6" fill="#fff8e1" />
+            <text x="60" y="70" text-anchor="middle" font-size="32" font-family="'Noto Serif Bengali', serif" fill="#7c3f00">VS</text>
+            <!-- Add more SVG elements for vintage look later -->
+        </svg>
+        <h1 id="logo-title">Vintage Saree House</h1>
+    </div>
+
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <button id="lang-en" class="lang-btn active">English</button>
+        <button id="lang-bn" class="lang-btn">বাংলা</button>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="vintage-nav">
+        <div class="nav-logo">
+            <svg width="40" height="40" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="55" stroke="#7c3f00" stroke-width="6" fill="#fff8e1" />
+                <text x="60" y="70" text-anchor="middle" font-size="24" font-family="'Noto Serif Bengali', serif" fill="#7c3f00">VS</text>
+            </svg>
+            <span class="site-title" data-en="Vintage Saree House" data-bn="ভিন্টেজ শাড়ি হাউস">Vintage Saree House</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home" data-en="Home" data-bn="হোম">Home</a></li>
+            <li><a href="#categories" data-en="Categories" data-bn="বিভাগ">Categories</a></li>
+            <li><a href="#cart" data-en="Cart" data-bn="কার্ট">Cart</a></li>
+            <li><a href="#orders" data-en="Orders" data-bn="অর্ডারসমূহ">Orders</a></li>
+            <li><a href="#wishlist" data-en="Wishlist" data-bn="উইশলিস্ট">Wishlist</a></li>
+            <li><a href="#login" data-en="Login/Register" data-bn="লগইন/রেজিস্টার">Login/Register</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero vintage-bg" id="home">
+        <div class="hero-content">
+            <h2 class="hero-title" data-en="Discover the Timeless Beauty of Bengali Sarees" data-bn="বাংলা শাড়ির চিরন্তন সৌন্দর্য আবিষ্কার করুন">Discover the Timeless Beauty of Bengali Sarees</h2>
+            <p class="hero-desc" data-en="Handpicked, authentic, and vintage sarees from Bengal's heartland." data-bn="বাংলার হৃদয় থেকে নির্বাচিত, আসল এবং ভিন্টেজ শাড়ি।">Handpicked, authentic, and vintage sarees from Bengal's heartland.</p>
+            <a href="#categories" class="shop-btn" data-en="Shop Now" data-bn="এখনই কিনুন">Shop Now</a>
+        </div>
+        <div class="hero-image">
+            <!-- Placeholder for hero image (add saree/model image later) -->
+            <img src="images/Front.webp" alt="Bengali Saree Model">
+        </div>
+    </section>
+    
+    <!-- Product Listing Section -->
+    <section class="products-section" id="categories">
+        <h2 class="section-title" data-en="Our Saree Collection" data-bn="আমাদের শাড়ি সংগ্রহ">Our Saree Collection</h2>
+        <div class="category-filter" id="category-filter"></div>
+        <div class="sort-filter-bar">
+            <label class="sort-label">
+                <span data-en="Sort by price" data-bn="দামের ক্রম">Sort by price</span>
+                <select id="sort-price" class="sort-select">
+                    <option value="default" data-en="Default" data-bn="ডিফল্ট">Default</option>
+                    <option value="low-high" data-en="Low → High" data-bn="কম → বেশি">Low → High</option>
+                    <option value="high-low" data-en="High → Low" data-bn="বেশি → কম">High → Low</option>
+                </select>
+            </label>
+            <label class="sort-label">
+                <span data-en="Color" data-bn="রং">Color</span>
+                <select id="filter-color" class="sort-select">
+                    <option value="all" data-en="All" data-bn="সব">All</option>
+                </select>
+            </label>
+        </div>
+        <div class="products-grid">
+            <!-- Saree Card Example (repeat for 20 sarees) -->
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Tant Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Tant" data-bn="তাঁত">Tant</span>
+                    <h3 class="saree-name" data-en="Red & White Classic Tant" data-bn="লাল-সাদা ক্লাসিক তাঁত">Red & White Classic Tant</h3>
+                    <p class="saree-desc" data-en="Handwoven cotton saree, perfect for summer festivals." data-bn="হাতের বোনা তুলোর শাড়ি, গ্রীষ্মের উৎসবের জন্য আদর্শ।">Handwoven cotton saree, perfect for summer festivals.</p>
+                    <div class="saree-price" data-en="₹1,200" data-bn="৳১,২০০">₹1,200</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Jamdani Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Jamdani" data-bn="জামদানি">Jamdani</span>
+                    <h3 class="saree-name" data-en="Royal Blue Jamdani" data-bn="রয়্যাল ব্লু জামদানি">Royal Blue Jamdani</h3>
+                    <p class="saree-desc" data-en="Exquisite motifs, lightweight and elegant." data-bn="চমৎকার মোটিফ, হালকা ও মার্জিত।">Exquisite motifs, lightweight and elegant.</p>
+                    <div class="saree-price" data-en="₹2,500" data-bn="৳২,৫০০">₹2,500</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Baluchari Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Baluchari" data-bn="বালুচরি">Baluchari</span>
+                    <h3 class="saree-name" data-en="Green Baluchari" data-bn="সবুজ বালুচরি">Green Baluchari</h3>
+                    <p class="saree-desc" data-en="Silk saree with mythological scenes on pallu." data-bn="পল্লুতে পৌরাণিক দৃশ্য সহ সিল্ক শাড়ি।">Silk saree with mythological scenes on pallu.</p>
+                    <div class="saree-price" data-en="₹3,800" data-bn="৳৩,৮০০">₹3,800</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Dhakai Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Dhakai" data-bn="ঢাকাই">Dhakai</span>
+                    <h3 class="saree-name" data-en="White Dhakai Jamdani" data-bn="সাদা ঢাকাই জামদানি">White Dhakai Jamdani</h3>
+                    <p class="saree-desc" data-en="Traditional white jamdani with red border." data-bn="লাল পাড় সহ ঐতিহ্যবাহী সাদা জামদানি।">Traditional white jamdani with red border.</p>
+                    <div class="saree-price" data-en="₹2,800" data-bn="৳২,৮০০">₹2,800</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Garad Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Garad" data-bn="গরদ">Garad</span>
+                    <h3 class="saree-name" data-en="Classic Garad" data-bn="ক্লাসিক গরদ">Classic Garad</h3>
+                    <p class="saree-desc" data-en="Pure silk, off-white with red border." data-bn="খাঁটি সিল্ক, লাল পাড় সহ অফ-হোয়াইট।">Pure silk, off-white with red border.</p>
+                    <div class="saree-price" data-en="₹3,200" data-bn="৳৩,২০০">₹3,200</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Katan Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Katan" data-bn="কাতান">Katan</span>
+                    <h3 class="saree-name" data-en="Magenta Katan Silk" data-bn="ম্যাজেন্টা কাতান সিল্ক">Magenta Katan Silk</h3>
+                    <p class="saree-desc" data-en="Rich silk saree with golden zari work." data-bn="সোনালী জরির কাজ সহ সমৃদ্ধ সিল্ক শাড়ি।">Rich silk saree with golden zari work.</p>
+                    <div class="saree-price" data-en="₹4,200" data-bn="৳৪,২০০">₹4,200</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Tussar Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Tussar" data-bn="তসর">Tussar</span>
+                    <h3 class="saree-name" data-en="Natural Tussar Silk" data-bn="ন্যাচারাল তসর সিল্ক">Natural Tussar Silk</h3>
+                    <p class="saree-desc" data-en="Earthy tones, lightweight and elegant." data-bn="মাটির রঙ, হালকা ও মার্জিত।">Earthy tones, lightweight and elegant.</p>
+                    <div class="saree-price" data-en="₹2,900" data-bn="৳২,৯০০">₹2,900</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Murshidabad Silk Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Murshidabad Silk" data-bn="মুর্শিদাবাদ সিল্ক">Murshidabad Silk</span>
+                    <h3 class="saree-name" data-en="Printed Murshidabad Silk" data-bn="প্রিন্টেড মুর্শিদাবাদ সিল্ক">Printed Murshidabad Silk</h3>
+                    <p class="saree-desc" data-en="Artistic prints, soft and flowy silk." data-bn="শিল্পিত প্রিন্ট, নরম ও ঝরঝরে সিল্ক।">Artistic prints, soft and flowy silk.</p>
+                    <div class="saree-price" data-en="₹3,100" data-bn="৳৩,১০০">₹3,100</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Matka Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Matka" data-bn="মাটকা">Matka</span>
+                    <h3 class="saree-name" data-en="Grey Matka Silk" data-bn="ধূসর মাটকা সিল্ক">Grey Matka Silk</h3>
+                    <p class="saree-desc" data-en="Textured silk, perfect for formal occasions." data-bn="টেক্সচার্ড সিল্ক, ফরমাল অনুষ্ঠানের জন্য আদর্শ।">Textured silk, perfect for formal occasions.</p>
+                    <div class="saree-price" data-en="₹2,600" data-bn="৳২,৬০০">₹2,600</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Kantha Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Kantha" data-bn="কাঁথা">Kantha</span>
+                    <h3 class="saree-name" data-en="Kantha Embroidery Saree" data-bn="কাঁথা এমব্রয়ডারি শাড়ি">Kantha Embroidery Saree</h3>
+                    <p class="saree-desc" data-en="Hand-embroidered, folk art inspired." data-bn="হাতের এমব্রয়ডারি, লোকশিল্প দ্বারা অনুপ্রাণিত।">Hand-embroidered, folk art inspired.</p>
+                    <div class="saree-price" data-en="₹2,400" data-bn="৳২,৪০০">₹2,400</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Cotton Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Cotton" data-bn="কটন">Cotton</span>
+                    <h3 class="saree-name" data-en="Yellow Summer Cotton" data-bn="হলুদ সামার কটন">Yellow Summer Cotton</h3>
+                    <p class="saree-desc" data-en="Soft, breathable, and perfect for daily wear." data-bn="নরম, আরামদায়ক, দৈনন্দিন ব্যবহারের জন্য উপযুক্ত।">Soft, breathable, and perfect for daily wear.</p>
+                    <div class="saree-price" data-en="₹1,000" data-bn="৳১,০০০">₹1,000</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Linen Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Linen" data-bn="লিনেন">Linen</span>
+                    <h3 class="saree-name" data-en="Pastel Linen Saree" data-bn="প্যাস্টেল লিনেন শাড়ি">Pastel Linen Saree</h3>
+                    <p class="saree-desc" data-en="Pastel shades, cool and comfortable." data-bn="প্যাস্টেল শেড, ঠান্ডা ও আরামদায়ক।">Pastel shades, cool and comfortable.</p>
+                    <div class="saree-price" data-en="₹1,800" data-bn="৳১,৮০০">₹1,800</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Swarnachari Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Swarnachari" data-bn="স্বর্ণচরী">Swarnachari</span>
+                    <h3 class="saree-name" data-en="Golden Swarnachari" data-bn="স্বর্ণচরী সোনালী">Golden Swarnachari</h3>
+                    <p class="saree-desc" data-en="Golden zari, rich and festive." data-bn="সোনালী জরির কাজ, সমৃদ্ধ ও উৎসবমুখর।">Golden zari, rich and festive.</p>
+                    <div class="saree-price" data-en="₹5,000" data-bn="৳৫,০০০">₹5,000</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Begampuri Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Begampuri" data-bn="বেগমপুরী">Begampuri</span>
+                    <h3 class="saree-name" data-en="Begampuri Stripes" data-bn="বেগমপুরী স্ট্রাইপস">Begampuri Stripes</h3>
+                    <p class="saree-desc" data-en="Handloom stripes, lightweight and stylish." data-bn="হ্যান্ডলুম স্ট্রাইপ, হালকা ও স্টাইলিশ।">Handloom stripes, lightweight and stylish.</p>
+                    <div class="saree-price" data-en="₹1,600" data-bn="৳১,৬০০">₹1,600</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Muslin Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Muslin" data-bn="মসলিন">Muslin</span>
+                    <h3 class="saree-name" data-en="White Muslin" data-bn="সাদা মসলিন">White Muslin</h3>
+                    <p class="saree-desc" data-en="Ultra-fine, soft and luxurious." data-bn="অতি সূক্ষ্ম, নরম ও বিলাসবহুল।">Ultra-fine, soft and luxurious.</p>
+                    <div class="saree-price" data-en="₹6,500" data-bn="৳৬,৫০০">₹6,500</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Cotton Silk Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Cotton Silk" data-bn="কটন সিল্ক">Cotton Silk</span>
+                    <h3 class="saree-name" data-en="Pink Cotton Silk" data-bn="গোলাপি কটন সিল্ক">Pink Cotton Silk</h3>
+                    <p class="saree-desc" data-en="Soft blend, festive and comfortable." data-bn="নরম মিশ্রণ, উৎসব ও আরামদায়ক।">Soft blend, festive and comfortable.</p>
+                    <div class="saree-price" data-en="₹2,200" data-bn="৳২,২০০">₹2,200</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Handloom Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Handloom" data-bn="হ্যান্ডলুম">Handloom</span>
+                    <h3 class="saree-name" data-en="Handloom Checks" data-bn="হ্যান্ডলুম চেকস">Handloom Checks</h3>
+                    <p class="saree-desc" data-en="Classic checks, pure handloom cotton." data-bn="ক্লাসিক চেক, খাঁটি হ্যান্ডলুম কটন।">Classic checks, pure handloom cotton.</p>
+                    <div class="saree-price" data-en="₹1,400" data-bn="৳১,৪০০">₹1,400</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Designer Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Designer" data-bn="ডিজাইনার">Designer</span>
+                    <h3 class="saree-name" data-en="Designer Party Saree" data-bn="ডিজাইনার পার্টি শাড়ি">Designer Party Saree</h3>
+                    <p class="saree-desc" data-en="Trendy, perfect for parties and events." data-bn="ট্রেন্ডি, পার্টি ও অনুষ্ঠানের জন্য উপযুক্ত।">Trendy, perfect for parties and events.</p>
+                    <div class="saree-price" data-en="₹3,000" data-bn="৳৩,০০০">₹3,000</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Silk Cotton Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Silk Cotton" data-bn="সিল্ক কটন">Silk Cotton</span>
+                    <h3 class="saree-name" data-en="Silk Cotton Blend" data-bn="সিল্ক কটন ব্লেন্ড">Silk Cotton Blend</h3>
+                    <p class="saree-desc" data-en="Soft blend, elegant drape." data-bn="নরম মিশ্রণ, মার্জিত ড্রেপ।">Soft blend, elegant drape.</p>
+                    <div class="saree-price" data-en="₹2,100" data-bn="৳২,১০০">₹2,100</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+            <div class="saree-card">
+                <div class="saree-img">
+                    <img src="images/saree1.webp" alt="Fancy Saree Model" />
+                </div>
+                <div class="saree-info">
+                    <span class="saree-category" data-en="Fancy" data-bn="ফ্যান্সি">Fancy</span>
+                    <h3 class="saree-name" data-en="Fancy Net Saree" data-bn="ফ্যান্সি নেট শাড়ি">Fancy Net Saree</h3>
+                    <p class="saree-desc" data-en="Net fabric, stylish and modern." data-bn="নেট ফেব্রিক, স্টাইলিশ ও আধুনিক।">Net fabric, stylish and modern.</p>
+                    <div class="saree-price" data-en="₹1,900" data-bn="৳১,৯০০">₹1,900</div>
+                    <button class="add-cart-btn" data-en="Add to Cart" data-bn="কার্টে যোগ করুন">Add to Cart</button>
+                    <div class="delivery-time" data-en="Delivery: Calculating..." data-bn="ডেলিভারি: গণনা হচ্ছে...">Delivery: Calculating...</div>
+                    <button class="review-btn" data-en="Reviews" data-bn="রিভিউ">Reviews</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vintage Cart Drawer -->
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-header">
+            <span class="cart-title" data-en="Your Cart" data-bn="আপনার কার্ট">Your Cart</span>
+            <button class="close-cart">&times;</button>
+        </div>
+        <div class="cart-items"></div>
+        <div class="cart-footer">
+            <span class="cart-total-label" data-en="Total" data-bn="মোট">Total</span>:
+            <span class="cart-total">₹0</span>
+            <button class="checkout-btn" data-en="Checkout" data-bn="চেকআউট">Checkout</button>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div id="review-modal" class="review-modal">
+        <div class="review-modal-content">
+            <button class="close-review">&times;</button>
+            <h3 class="review-title" data-en="Saree Reviews" data-bn="শাড়ির রিভিউ">Saree Reviews</h3>
+            <div class="reviews-list"></div>
+            <form class="review-form">
+                <input type="text" class="reviewer-name" placeholder="Your Name" data-en="Your Name" data-bn="আপনার নাম" required />
+                <select class="review-rating" required>
+                    <option value="" disabled selected data-en="Rating" data-bn="রেটিং">Rating</option>
+                    <option value="5">★★★★★</option>
+                    <option value="4">★★★★☆</option>
+                    <option value="3">★★★☆☆</option>
+                    <option value="2">★★☆☆☆</option>
+                    <option value="1">★☆☆☆☆</option>
+                </select>
+                <textarea class="review-comment" placeholder="Your Review" data-en="Your Review" data-bn="আপনার রিভিউ" required></textarea>
+                <button type="submit" class="submit-review" data-en="Submit Review" data-bn="রিভিউ দিন">Submit Review</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="checkout-modal">
+        <div class="checkout-modal-content">
+            <button class="close-checkout">&times;</button>
+            <h3 class="checkout-title" data-en="Complete Your Order" data-bn="আপনার অর্ডার সম্পূর্ণ করুন">Complete Your Order</h3>
+            
+            <!-- Progress Indicator -->
+            <div class="checkout-progress">
+                <div class="progress-step active" data-step="1">
+                    <div class="progress-number">1</div>
+                    <span data-en="Shipping" data-bn="শিপিং">Shipping</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="2">
+                    <div class="progress-number">2</div>
+                    <span data-en="Payment" data-bn="পেমেন্ট">Payment</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="3">
+                    <div class="progress-number">3</div>
+                    <span data-en="Review" data-bn="পর্যালোচনা">Review</span>
+                </div>
+            </div>
+            
+            <div class="checkout-steps">
+                <!-- Step 1: Shipping Information -->
+                <div class="checkout-step active" id="step-1">
+                    <h4 class="step-title" data-en="Shipping Information" data-bn="শিপিং তথ্য">Shipping Information</h4>
+                    <form class="shipping-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" data-en="Full Name" data-bn="পূর্ণ নাম">Full Name</label>
+                                <input type="text" class="form-input" name="fullName" required />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" data-en="Phone Number" data-bn="ফোন নম্বর">Phone Number</label>
+                                <input type="tel" class="form-input" name="phone" required />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" data-en="Email" data-bn="ইমেইল">Email</label>
+                                <input type="email" class="form-input" name="email" required />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" data-en="Pincode" data-bn="পিনকোড">Pincode</label>
+                                <input type="text" class="form-input" name="pincode" maxlength="6" required />
+                                <div class="delivery-estimate" style="display: none;"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-en="Full Address" data-bn="সম্পূর্ণ ঠিকানা">Full Address</label>
+                            <textarea class="form-input" name="address" rows="3" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" data-en="City" data-bn="শহর">City</label>
+                                <input type="text" class="form-input" name="city" required />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" data-en="State" data-bn="রাজ্য">State</label>
+                                <select class="form-input" name="state" required>
+                                    <option value="">Select State</option>
+                                    <option value="West Bengal">West Bengal</option>
+                                    <option value="Bihar">Bihar</option>
+                                    <option value="Jharkhand">Jharkhand</option>
+                                    <option value="Odisha">Odisha</option>
+                                    <option value="Assam">Assam</option>
+                                    <option value="Tripura">Tripura</option>
+                                    <option value="Meghalaya">Meghalaya</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="next-step-btn" data-en="Next: Payment" data-bn="পরবর্তী: পেমেন্ট">Next: Payment</button>
+                    </form>
+                </div>
+
+                <!-- Step 2: Payment Information -->
+                <div class="checkout-step" id="step-2">
+                    <h4 class="step-title" data-en="Payment Method" data-bn="পেমেন্ট পদ্ধতি">Payment Method</h4>
+                    <div class="payment-options">
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="cod" checked />
+                            <span class="payment-option-text">
+                                <span class="payment-icon">💳</span>
+                                <span data-en="Cash on Delivery" data-bn="ক্যাশ অন ডেলিভারি">Cash on Delivery</span>
+                            </span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="upi" />
+                            <span class="payment-option-text">
+                                <span class="payment-icon">📱</span>
+                                <span data-en="UPI Payment" data-bn="ইউপিআই পেমেন্ট">UPI Payment</span>
+                            </span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="card" />
+                            <span class="payment-option-text">
+                                <span class="payment-icon">💳</span>
+                                <span data-en="Credit/Debit Card" data-bn="ক্রেডিট/ডেবিট কার্ড">Credit/Debit Card</span>
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <div class="payment-details" id="payment-details">
+                        <!-- Payment details will be shown based on selection -->
+                    </div>
+                    
+                    <div class="step-buttons">
+                        <button type="button" class="prev-step-btn" data-en="Previous" data-bn="পূর্ববর্তী">Previous</button>
+                        <button type="button" class="next-step-btn" data-en="Next: Review" data-bn="পরবর্তী: পর্যালোচনা">Next: Review</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Order Review -->
+                <div class="checkout-step" id="step-3">
+                    <h4 class="step-title" data-en="Order Review" data-bn="অর্ডার পর্যালোচনা">Order Review</h4>
+                    <div class="order-summary">
+                        <div class="order-items"></div>
+                        <div class="order-totals">
+                            <div class="total-row">
+                                <span data-en="Subtotal" data-bn="সাবটোটাল">Subtotal</span>
+                                <span class="subtotal-amount">₹0</span>
+                            </div>
+                            <div class="total-row">
+                                <span data-en="Delivery" data-bn="ডেলিভারি">Delivery</span>
+                                <span class="delivery-amount">₹50</span>
+                            </div>
+                            <div class="total-row total-final">
+                                <span data-en="Total" data-bn="মোট">Total</span>
+                                <span class="final-amount">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-buttons">
+                        <button type="button" class="prev-step-btn" data-en="Previous" data-bn="পূর্ববর্তী">Previous</button>
+                        <button type="button" class="place-order-btn" data-en="Place Order" data-bn="অর্ডার দিন">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="auth-modal">
+        <div class="auth-modal-content">
+            <button class="close-auth">&times;</button>
+            <h3 class="auth-title" data-en="Login / Register" data-bn="লগইন / রেজিস্টার">Login / Register</h3>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-target="login" data-en="Login" data-bn="লগইন">Login</button>
+                <button class="auth-tab" data-target="register" data-en="Register" data-bn="রেজিস্টার">Register</button>
+            </div>
+            <div class="auth-forms">
+                <form id="login-form" class="auth-form" autocomplete="off">
+                    <label class="auth-label" data-en="Phone Number" data-bn="ফোন নম্বর">Phone Number</label>
+                    <div class="phone-row">
+                        <select class="country-code country-code-login">
+                            <option value="+91" selected>+91</option>
+                            <option value="+880">+880</option>
+                            <option value="+1">+1</option>
+                        </select>
+                        <input type="tel" class="auth-input auth-phone-login" placeholder="e.g. 9876543210" />
+                    </div>
+                    <div class="otp-row">
+                        <button type="button" class="send-otp-btn send-otp-login" data-en="Send OTP" data-bn="ওটিপি পাঠান">Send OTP</button>
+                        <button type="button" class="resend-otp-btn resend-otp-login" disabled>Resend OTP</button>
+                        <span class="otp-hint otp-hint-login" data-en="(Use full number or select country)" data-bn="(দেশ নির্বাচন করুন বা পূর্ণ নম্বর দিন)">(Use full number or select country)</span>
+                        <span class="otp-timer otp-timer-login"></span>
+                    </div>
+                    <div id="recaptcha-login" class="recaptcha-box"></div>
+                    <label class="auth-label" data-en="Enter OTP" data-bn="ওটিপি লিখুন">Enter OTP</label>
+                    <input type="text" class="auth-input auth-otp-login" maxlength="6" placeholder="6-digit OTP" />
+                    <button type="submit" class="auth-submit" data-en="Login" data-bn="লগইন">Login</button>
+                </form>
+
+                <form id="register-form" class="auth-form hidden" autocomplete="off">
+                    <label class="auth-label" data-en="Phone Number" data-bn="ফোন নম্বর">Phone Number</label>
+                    <div class="phone-row">
+                        <select class="country-code country-code-register">
+                            <option value="+91" selected>+91</option>
+                            <option value="+880">+880</option>
+                            <option value="+1">+1</option>
+                        </select>
+                        <input type="tel" class="auth-input auth-phone-register" placeholder="e.g. 9876543210" />
+                    </div>
+                    <div class="otp-row">
+                        <button type="button" class="send-otp-btn send-otp-register" data-en="Send OTP" data-bn="ওটিপি পাঠান">Send OTP</button>
+                        <button type="button" class="resend-otp-btn resend-otp-register" disabled>Resend OTP</button>
+                        <span class="otp-hint otp-hint-register" data-en="(Use full number or select country)" data-bn="(দেশ নির্বাচন করুন বা পূর্ণ নম্বর দিন)">(Use full number or select country)</span>
+                        <span class="otp-timer otp-timer-register"></span>
+                    </div>
+                    <div id="recaptcha-register" class="recaptcha-box"></div>
+                    <label class="auth-label" data-en="Enter OTP" data-bn="ওটিপি লিখুন">Enter OTP</label>
+                    <input type="text" class="auth-input auth-otp-register" maxlength="6" placeholder="6-digit OTP" />
+                    <button type="submit" class="auth-submit" data-en="Register" data-bn="রেজিস্টার">Register</button>
+                </form>
+            </div>
+            <div class="auth-msg" aria-live="polite"></div>
+        </div>
+    </div>
+
+    <!-- Order Success Modal -->
+    <div id="order-success-modal" class="order-success-modal">
+        <div class="order-success-content">
+            <div class="success-icon">✅</div>
+            <h3 class="success-title" data-en="Order Placed Successfully!" data-bn="অর্ডার সফলভাবে দেওয়া হয়েছে!">Order Placed Successfully!</h3>
+            <div class="order-details">
+                <p class="order-id" data-en="Order ID" data-bn="অর্ডার আইডি">Order ID: <span id="success-order-id"></span></p>
+                <p class="order-date" data-en="Order Date" data-bn="অর্ডারের তারিখ">Order Date: <span id="success-order-date"></span></p>
+                <p class="order-total" data-en="Total Amount" data-bn="মোট পরিমাণ">Total Amount: <span id="success-order-total"></span></p>
+            </div>
+            <audio id="order-success-sound" preload="auto">
+                <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg">
+            </audio>
+            <div class="success-message">
+                <p data-en="Thank you for your order! We'll start processing it right away." data-bn="আপনার অর্ডারের জন্য ধন্যবাদ! আমরা এখনই এটি প্রক্রিয়া শুরু করব।">Thank you for your order! We'll start processing it right away.</p>
+                <p data-en="You'll receive updates via SMS and email." data-bn="আপনি এসএমএস এবং ইমেইলের মাধ্যমে আপডেট পাবেন।">You'll receive updates via SMS and email.</p>
+            </div>
+            <div style="display:flex; gap:8px; justify-content:center;">
+                <button class="success-close-btn" data-en="Continue Shopping" data-bn="কেনাকাটা চালিয়ে যান">Continue Shopping</button>
+                <button class="success-orders-btn" data-en="View Orders" data-bn="অর্ডার দেখুন">View Orders</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders Modal -->
+    <div id="orders-modal" class="orders-modal">
+        <div class="orders-content">
+            <button class="close-orders">&times;</button>
+            <h3 class="orders-title" data-en="Your Orders" data-bn="আপনার অর্ডারসমূহ">Your Orders</h3>
+            <div class="orders-list"></div>
+        </div>
+    </div>
+
+    <!-- Track Order Modal -->
+    <div id="track-modal" class="track-modal">
+        <div class="track-content">
+            <button class="close-track">&times;</button>
+            <h3 class="track-title" data-en="Track Order" data-bন="অর্ডার ট্র্যাক করুন">Track Order</h3>
+            <div class="track-order-id"></div>
+            <div class="track-steps">
+                <div class="track-step" data-step="1"><span>Placed</span></div>
+                <div class="track-line"></div>
+                <div class="track-step" data-step="2"><span>Packed</span></div>
+                <div class="track-line"></div>
+                <div class="track-step" data-step="3"><span>Shipped</span></div>
+                <div class="track-line"></div>
+                <div class="track-step" data-step="4"><span>Out</span></div>
+                <div class="track-line"></div>
+                <div class="track-step" data-step="5"><span>Delivered</span></div>
+            </div>
+            <div class="track-estimate"></div>
+        </div>
+    </div>
+
+    <!-- Wishlist Modal -->
+    <div id="wishlist-modal" class="orders-modal">
+        <div class="orders-content">
+            <button class="close-wishlist">&times;</button>
+            <h3 class="orders-title" data-en="Your Wishlist" data-bn="আপনার উইশলিস্ট">Your Wishlist</h3>
+            <div class="orders-list wishlist-list"></div>
+        </div>
+    </div>
+
+    <!-- Saved For Later Modal -->
+    <div id="saved-modal" class="orders-modal">
+        <div class="orders-content">
+            <button class="close-saved">&times;</button>
+            <h3 class="orders-title" data-en="Saved for Later" data-bn="পরে সংরক্ষণ করা হয়েছে">Saved for Later</h3>
+            <div class="orders-list saved-list"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div>
+                <h4>About Us</h4>
+                <p>Vintage Saree House curates handpicked Bengali sarees celebrating craft, comfort, and culture.</p>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#categories">Shop Sarees</a></li>
+                    <li><a href="#orders">Orders</a></li>
+                    <li><a href="#wishlist">Wishlist</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Help</h4>
+                <ul>
+                    <li><a href="#faq">FAQs</a></li>
+                    <li><a href="#care">Saree Care Tips</a></li>
+                    <li><a href="#terms">Terms & Conditions</a></li>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="#contact">Contact Us</a></li>
+                    <li><a href="#blog">Blog / Styling Tips</a></li>
+                    <li><a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a></li>
+                    <li><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">© <span id="footer-year"></span> Vintage Saree House</div>
+    </footer>
+
+    <!-- Info Modal (FAQs, Care, Terms, Privacy, Contact, Blog) -->
+    <div id="info-modal" class="orders-modal">
+        <div class="orders-content">
+            <button class="close-info">&times;</button>
+            <h3 class="orders-title info-title">Title</h3>
+            <div class="info-body"></div>
+        </div>
+    </div>
+
+    <!-- Orders Modal -->
+    <div id="orders-modal" class="orders-modal">
+        <div class="orders-content">
+            <button class="close-orders">&times;</button>
+            <h3 class="orders-title" data-en="Your Orders" data-bn="আপনার অর্ডারসমূহ">Your Orders</h3>
+            <div class="orders-list"></div>
+        </div>
+    </div>
+
+    <!-- Track Order Modal -->
+    <div id="track-modal" class="track-modal">
+        <div class="track-content">
+            <button class="close-track">&times;</button>
+            <h3 class="track-title" data-en="Track Order" data-bn="অর্ডার ট্র্যাক করুন">Track Order</h3>
+            <div class="track-order-id"></div>
+            <div class="track-steps">
+                <div class="track-step" data-step="1"><span>Placed</span></div>
+                <div class="track-line"></div>
+                <div class="track-step" data-step="2"><span>Packed</span></div>
+                <div class="track-line"></div>
+                <div class="track-step" data-step="3"><span>Shipped</span></div>
+                <div class="track-line"></div>
+                <div class="track-step" data-step="4"><span>Out for delivery</span></div>
+                <div class="track-line"></div>
+                <div class="track-step" data-step="5"><span>Delivered</span></div>
+            </div>
+            <div class="track-estimate"></div>
+        </div>
+    </div>
+</body>
+</html>
